@@ -6,8 +6,11 @@ abstract class CardEvent {}
 class CreateList extends CardEvent {}
 
 class RemoveList extends CardEvent {
-  final int currentNumber;
-  RemoveList(this.currentNumber);
+  final int currentList;
+  RemoveList(this.currentList);
 }
 
-class IncreaseNumber extends CardEvent {}
+class IncreaseNumber extends CardEvent {
+  final int currentNumber;
+  IncreaseNumber(this.currentNumber);
+}

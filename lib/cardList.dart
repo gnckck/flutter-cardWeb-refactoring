@@ -11,6 +11,8 @@ class CardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardBloc = BlocProvider.of<CardBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -21,7 +23,7 @@ class CardList extends StatelessWidget {
       ),
       body: Column(children: [
         FloatingActionButton(
-          onPressed: () => context.read<CardBloc>().add(CreateList()),
+          onPressed: () => cardBloc.add(CreateList()),
           child: const Icon(Icons.add),
         ),
         Expanded(
@@ -39,9 +41,9 @@ class CardList extends StatelessWidget {
                           child: const Icon(
                             Icons.delete,
                           ),
-                          onTap: () =>
-                              context.read<CardBloc>().add(RemoveList(index)),
+                          onTap: () => cardBloc.add(RemoveList(index)),
                         ),
+                        onTap: () => cardBloc.add(IncreaseNumber(index)),
                       ),
                     );
                   });
