@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ex_refactoring/bloc/card_bloc.dart';
 
 import 'cardList.dart';
 
@@ -11,9 +13,12 @@ class CardApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'cardList',
-      home: CardList(),
+    return BlocProvider<CardBloc>(
+      create: (_) => CardBloc(),
+      child: const MaterialApp(
+        title: 'cardList',
+        home: CardList(),
+      ),
     );
   }
 }
