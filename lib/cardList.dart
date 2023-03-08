@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -32,6 +34,13 @@ class CardList extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                           state.cardNumbers[index].toString(),
+                        ),
+                        trailing: GestureDetector(
+                          child: const Icon(
+                            Icons.delete,
+                          ),
+                          onTap: () =>
+                              context.read<CardBloc>().add(RemoveList(index)),
                         ),
                       ),
                     );
