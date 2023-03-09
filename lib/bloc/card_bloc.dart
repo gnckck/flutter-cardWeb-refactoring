@@ -7,26 +7,49 @@ part 'card_event.dart';
 part 'card_state.dart';
 
 class CardBloc extends Bloc<CardEvent, CardState> {
+  int? beforeIndex;
+
   CardBloc() : super(CardState()) {
-    on<CreateList>(((event, emit) {
-      emit(
+    on<CreateCard>(
+      (event, emit) => emit(
         state.copyWith(
             cardNumbers: List.from(state.cardNumbers)
               ..add(Random().nextInt(50))),
-      );
-    }));
+      ),
+    );
 
-    on<RemoveList>(
+    on<RemoveCard>(
+      (event, emit) => emit(
+        state.copyWith(
+          cardNumbers: List.from(state.cardNumbers)
+            ..removeAt(event.currentList),
+        ),
+      ),
+    );
+
+    on<IncreaseNumber>(
       ((event, emit) {
         emit(state.copyWith(
-            cardNumbers: List.from(state.cardNumbers)
-              ..removeAt(event.currentList)));
+            cardNumber: state.cardNumbers[event.currentNumber]++)); // 변경
       }),
     );
 
-    on<IncreaseNumber>(((event, emit) {
-      emit(
-          state.copyWith(cardNumber: state.cardNumbers[event.currentNumber]++));
-    }));
+    on<DragCard>(
+      (event, emit) {
+        beforeIndex ??= event.currentIndex;
+        if (beforeIndex != event.currentIndex) {
+          int temp = state.cardNumbers[beforeIndex!];
+          state.cardNumbers.removeAt(beforeIndex!);
+          state.cardNumbers.insert(event.currentIndex, temp);
+          beforeIndex = event.currentIndex;
+          emit(state.copyWith(cardNumbers: state.cardNumbers));
+        }
+      },
+    );
+
+    on<EndDrag>((event, emit) {
+      beforeIndex = null;
+      emit(state);
+    });
   }
 }

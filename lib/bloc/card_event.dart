@@ -3,14 +3,21 @@ part of 'card_bloc.dart';
 @immutable
 abstract class CardEvent {}
 
-class CreateList extends CardEvent {}
+class CreateCard extends CardEvent {}
 
-class RemoveList extends CardEvent {
+class RemoveCard extends CardEvent {
   final int currentList;
-  RemoveList(this.currentList);
+  RemoveCard(this.currentList);
 }
 
 class IncreaseNumber extends CardEvent {
   final int currentNumber;
   IncreaseNumber(this.currentNumber);
 }
+
+class DragCard extends CardEvent {
+  final int currentIndex;
+  DragCard(this.currentIndex);
+}
+
+class EndDrag extends CardEvent {}
