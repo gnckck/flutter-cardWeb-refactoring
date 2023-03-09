@@ -29,8 +29,9 @@ class CardBloc extends Bloc<CardEvent, CardState> {
 
     on<IncreaseNumber>(
       ((event, emit) {
-        emit(state.copyWith(
-            cardNumber: state.cardNumbers[event.currentNumber]++)); // 변경
+        List<int> nextCards = List<int>.from(state.cardNumbers);
+        nextCards[event.currentNumber]++;
+        emit(state.copyWith(cardNumbers: nextCards));
       }),
     );
 

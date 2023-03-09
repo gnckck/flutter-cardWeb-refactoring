@@ -20,7 +20,26 @@ class CardList extends StatelessWidget {
       body: Column(
         children: [
           FloatingActionButton(
-            onPressed: () => cardBloc.add(CreateCard()),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text(
+                  '생성할 카드이름을 입력해주쇼',
+                  style: TextStyle(fontSize: 18),
+                ),
+                content: const TextField(),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, '확인'),
+                    child: const Text('확인'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, '취소'),
+                    child: const Text('취소'),
+                  ),
+                ],
+              ),
+            ),
             child: const Icon(Icons.add),
           ),
           Expanded(
@@ -73,3 +92,5 @@ class CardList extends StatelessWidget {
     );
   }
 }
+
+// cardBloc.add(CreateCard())
