@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ex_refactoring/bloc/card_bloc.dart';
 
 class CardList extends StatelessWidget {
-  const CardList({super.key});
+  final TextEditingController cardTextEditingController =
+      TextEditingController();
+  CardList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +29,16 @@ class CardList extends StatelessWidget {
                   '생성할 카드이름을 입력해주쇼',
                   style: TextStyle(fontSize: 18),
                 ),
-                content: const TextField(),
+                content: TextField(
+                  controller: cardTextEditingController,
+                ),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.pop(context, '확인'),
+                    onPressed: () {
+                      cardBloc.add(SendText(cardTextEditingController.text));
+                      Navigator.pop(context);
+                      cardTextEditingController.clear();
+                    },
                     child: const Text('확인'),
                   ),
                   TextButton(
@@ -48,7 +56,7 @@ class CardList extends StatelessWidget {
                 return DragTarget(
                   builder: (context, candidateData, rejectedData) {
                     return ListView.builder(
-                      itemCount: state.cardNumbers.length,
+                      itemCount: state.cardNames.length,
                       itemBuilder: (context, index) {
                         final deviceWidth = MediaQuery.of(context).size.width;
                         final Widget showCard = SizedBox(
@@ -56,7 +64,7 @@ class CardList extends StatelessWidget {
                           child: Card(
                             child: ListTile(
                               title: Text(
-                                state.cardNumbers[index].toString(),
+                                state.cardNames[index].toString(),
                               ),
                               trailing: GestureDetector(
                                 child: const Icon(
@@ -64,7 +72,6 @@ class CardList extends StatelessWidget {
                                 ),
                                 onTap: () => cardBloc.add(RemoveCard(index)),
                               ),
-                              onTap: () => cardBloc.add(IncreaseNumber(index)),
                             ),
                           ),
                         );
@@ -92,5 +99,7 @@ class CardList extends StatelessWidget {
     );
   }
 }
+
+
 
 // cardBloc.add(CreateCard())

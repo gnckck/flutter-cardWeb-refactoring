@@ -1,20 +1,16 @@
 part of 'card_bloc.dart';
 
 class CardState {
-  final List<int> cardNumbers;
-  final int cardNumber;
+  final List<String> cardNames;
 
   CardState({
-    cardNumbers,
-    this.cardNumber = 0,
-  }) : cardNumbers = cardNumbers ?? [];
+    cardNames,
+  }) : cardNames = cardNames ?? [];
 
   CardState copyWith({
-    List<int>? cardNumbers,
-    int? cardNumber,
+    List<String>? cardNames,
   }) =>
       CardState(
-        cardNumbers: cardNumbers ?? this.cardNumbers,
-        cardNumber: cardNumber ?? this.cardNumber,
+        cardNames: cardNames ?? this.cardNames,
       );
 }

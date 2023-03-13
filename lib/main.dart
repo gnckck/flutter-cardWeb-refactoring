@@ -15,7 +15,7 @@ class CardApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CardBloc>(
       create: (_) => CardBloc(),
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'cardList',
         home: CardList(),
       ),
