@@ -19,3 +19,10 @@ class SendText extends CardEvent {
   final String enteredText;
   SendText(this.enteredText);
 }
+
+class IsChecked extends CardEvent {
+  final int index;
+  final bool value;
+
+  IsChecked(this.value, this.index);
+}
