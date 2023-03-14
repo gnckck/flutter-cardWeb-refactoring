@@ -1,21 +1,28 @@
 part of 'card_bloc.dart';
 
+class CheckState {
+  String cardName;
+  bool isChecked;
+
+  CheckState(this.cardName, {this.isChecked = false});
+}
+
 class CardState {
   final List<String> cardNames;
-  List<bool> cardStates;
+  final List<CheckState> sample;
 
   CardState({
     cardNames,
-    cardStates,
+    sample,
   })  : cardNames = cardNames ?? [],
-        cardStates = cardStates ?? [];
+        sample = sample ?? [];
 
   CardState copyWith({
     List<String>? cardNames,
-    List<bool>? cardStates,
+    List<CheckState>? sample,
   }) =>
       CardState(
+        sample: sample,
         cardNames: cardNames ?? this.cardNames,
-        cardStates: cardStates ?? this.cardStates,
       );
 }

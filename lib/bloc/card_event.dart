@@ -22,6 +22,7 @@ class SendText extends CardEvent {
 
 class IsChecked extends CardEvent {
   final int index;
+  final bool value;
 
-  IsChecked(this.index);
+  IsChecked(this.value, this.index);
 }

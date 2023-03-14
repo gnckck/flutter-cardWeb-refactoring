@@ -16,7 +16,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     on<RemoveCard>(
       (event, emit) => emit(
         state.copyWith(
-          cardNames: List.from(state.cardNames)..removeAt(event.currentList),
+          sample: List.from(state.sample)..removeAt(event.currentList),
         ),
       ),
     );
@@ -25,11 +25,13 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       (event, emit) {
         beforeIndex ??= event.currentIndex;
         if (beforeIndex != event.currentIndex) {
-          String temp = state.cardNames[beforeIndex!];
-          state.cardNames.removeAt(beforeIndex!);
-          state.cardNames.insert(event.currentIndex, temp);
+          CheckState temp = state.sample[beforeIndex!];
+
+          state.sample.removeAt(beforeIndex!);
+          state.sample.insert(event.currentIndex, temp);
+
           beforeIndex = event.currentIndex;
-          emit(state.copyWith(cardNames: state.cardNames));
+          emit(state.copyWith(sample: state.sample));
         }
       },
     );
@@ -44,19 +46,14 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     on<SendText>(
       (event, emit) => emit(
         state.copyWith(
-            cardNames: List.from(state.cardNames)..add(event.enteredText),
-            cardStates: List.from(state.cardStates)..add(false)),
+          sample: List.from(state.sample)..add(CheckState(event.enteredText)),
+        ),
       ),
     );
 
     on<IsChecked>((event, emit) {
-      emit(
-        state.copyWith(
-          cardStates: List.from(state.cardStates)
-              .mapIndexed<bool>((index, e) => index == event.index ? !e : e)
-              .toList(),
-        ),
-      );
+      state.sample[event.index].isChecked = event.value;
+      emit(state.copyWith(sample: state.sample));
     });
   }
 }

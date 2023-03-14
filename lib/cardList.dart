@@ -72,19 +72,19 @@ class CardList extends StatelessWidget {
                 return DragTarget(
                   builder: (context, candidateData, rejectedData) {
                     return ListView.builder(
-                      itemCount: state.cardNames.length,
+                      itemCount: state.sample.length,
                       itemBuilder: (context, index) {
                         final deviceWidth = MediaQuery.of(context).size.width;
                         final Widget showCard = SizedBox(
                           width: deviceWidth,
                           child: Card(
                             child: CheckboxListTile(
-                              value: state.cardStates[index],
+                              value: state.sample[index].isChecked,
                               onChanged: (newValue) {
-                                cardBloc.add(IsChecked(index));
+                                cardBloc.add(IsChecked(newValue!, index));
                               },
                               title: Text(
-                                state.cardNames[index],
+                                state.sample[index].cardName,
                               ),
                               secondary: GestureDetector(
                                 child: const Icon(
