@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ex_refactoring/bloc/card_bloc.dart';
+import 'package:flutter_ex_refactoring/tabBar.dart';
+
+// const List tabs = ['전체', '체크', '체크X'];
 
 class CardList extends StatelessWidget {
   final TextEditingController cardTextEditingController =
       TextEditingController();
+
   CardList({super.key});
 
   @override
@@ -21,6 +25,15 @@ class CardList extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // SizedBox(
+          //   width: 500,
+          //   height: 400,
+          //   child:
+          //   GridView.count(
+          //     crossAxisCount: 3,
+          //     children: tabs.map((e) => ThreeTabs(text: e)).toList(),
+          //   ),
+          // ),
           FloatingActionButton(
             onPressed: () => showDialog(
               context: context,
@@ -42,7 +55,10 @@ class CardList extends StatelessWidget {
                     child: const Text('확인'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.pop(context, '취소'),
+                    onPressed: () {
+                      Navigator.pop(context, '취소');
+                      cardTextEditingController.clear();
+                    },
                     child: const Text('취소'),
                   ),
                 ],
@@ -62,11 +78,15 @@ class CardList extends StatelessWidget {
                         final Widget showCard = SizedBox(
                           width: deviceWidth,
                           child: Card(
-                            child: ListTile(
+                            child: CheckboxListTile(
+                              value: state.cardStates[index],
+                              onChanged: (newValue) {
+                                cardBloc.add(IsChecked(index));
+                              },
                               title: Text(
-                                state.cardNames[index].toString(),
+                                state.cardNames[index],
                               ),
-                              trailing: GestureDetector(
+                              secondary: GestureDetector(
                                 child: const Icon(
                                   Icons.delete,
                                 ),
@@ -99,7 +119,5 @@ class CardList extends StatelessWidget {
     );
   }
 }
-
-
 
 // cardBloc.add(CreateCard())

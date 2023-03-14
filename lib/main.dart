@@ -17,7 +17,7 @@ class CardApp extends StatelessWidget {
       create: (_) => CardBloc(),
       child: MaterialApp(
         title: 'cardList',
-        home: CardList(),
+        home: DefaultTabController(length: 3, child: CardList()),
       ),
     );
   }
