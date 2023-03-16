@@ -4,8 +4,8 @@ part of 'card_bloc.dart';
 abstract class CardEvent {}
 
 class RemoveCard extends CardEvent {
-  final int currentList;
-  RemoveCard(this.currentList);
+  final String id;
+  RemoveCard(this.id);
 }
 
 class DragCard extends CardEvent {
@@ -21,8 +21,8 @@ class SendText extends CardEvent {
 }
 
 class IsChecked extends CardEvent {
-  final int index;
+  final String id;
   final bool value;
 
-  IsChecked(this.value, this.index);
+  IsChecked(this.value, this.id);
 }
