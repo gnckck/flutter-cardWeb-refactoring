@@ -13,13 +13,13 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   int? beforeIndex;
 
   CardBloc() : super(CardState()) {
-    on<RemoveCard>(
-      (event, emit) => emit(
+    on<RemoveCard>((event, emit) {
+      emit(
         state.copyWith(
-          sample: List.from(state.sample)..removeAt(event.currentList),
-        ),
-      ),
-    );
+            sample: state.sample
+              ..removeWhere((element) => event.id == element.cardId)),
+      );
+    });
 
     on<DragCard>(
       (event, emit) {
@@ -43,16 +43,18 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       },
     );
 
-    on<SendText>(
-      (event, emit) => emit(
-        state.copyWith(
-          sample: List.from(state.sample)..add(CheckState(event.enteredText)),
-        ),
-      ),
-    );
+    on<SendText>((event, emit) {
+      final String id = DateTime.now().toString();
+      emit(state.copyWith(
+        sample: List.from(state.sample)..add(CheckState(event.enteredText, id)),
+      ));
+    });
 
     on<IsChecked>((event, emit) {
-      state.sample[event.index].isChecked = event.value;
+      int targetIndex =
+          state.sample.indexWhere((element) => event.id == element.cardId);
+      state.sample[targetIndex].isChecked = event.value;
+
       emit(state.copyWith(sample: state.sample));
     });
   }
