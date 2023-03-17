@@ -26,3 +26,12 @@ class IsChecked extends CardEvent {
 
   IsChecked(this.value, this.id);
 }
+
+class ChangeName extends CardEvent {
+  final String id;
+  final String newCardName;
+
+  ChangeName({required this.newCardName, required this.id});
+}
+
+class SearchCard extends CardEvent {}

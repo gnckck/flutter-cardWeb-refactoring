@@ -43,19 +43,33 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       },
     );
 
-    on<SendText>((event, emit) {
-      final String id = DateTime.now().toString();
-      emit(state.copyWith(
-        sample: List.from(state.sample)..add(CheckState(event.enteredText, id)),
-      ));
-    });
+    on<SendText>(
+      (event, emit) {
+        final String id = DateTime.now().toString();
+        emit(state.copyWith(
+          sample: List.from(state.sample)
+            ..add(CheckState(event.enteredText, id)),
+        ));
+      },
+    );
 
-    on<IsChecked>((event, emit) {
-      int targetIndex =
-          state.sample.indexWhere((element) => event.id == element.cardId);
-      state.sample[targetIndex].isChecked = event.value;
+    on<IsChecked>(
+      (event, emit) {
+        int targetIndex =
+            state.sample.indexWhere((element) => event.id == element.cardId);
+        state.sample[targetIndex].isChecked = event.value;
 
-      emit(state.copyWith(sample: state.sample));
-    });
+        emit(state.copyWith(sample: state.sample));
+      },
+    );
+
+    on<ChangeName>(
+      (event, emit) {
+        int targetIndex =
+            state.sample.indexWhere((element) => event.id == element.cardId);
+        state.sample[targetIndex].cardName = event.newCardName;
+        emit(state.copyWith(sample: state.sample));
+      },
+    );
   }
 }
