@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ex_refactoring/bloc/card_bloc.dart';
+import 'package:flutter_ex_refactoring/search.dart';
 import 'package:flutter_ex_refactoring/tabBarView.dart';
 
 class CardList extends StatelessWidget {
@@ -63,6 +64,7 @@ class CardList extends StatelessWidget {
                               onPressed: () {
                                 cardBloc.add(
                                     SendText(cardTextEditingController.text));
+
                                 Navigator.pop(context);
                                 cardTextEditingController.clear();
                               },
@@ -80,6 +82,7 @@ class CardList extends StatelessWidget {
                       ),
                       child: const Icon(Icons.add),
                     ),
+                    Search(),
                     Expanded(
                       child: DragTarget(
                         builder: (context, candidateData, rejectedData) {
@@ -97,8 +100,53 @@ class CardList extends StatelessWidget {
                                       cardBloc.add(IsChecked(newValue!,
                                           state.sample[index].cardId));
                                     },
-                                    title: Text(
-                                      state.sample[index].cardName,
+                                    title: GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text(
+                                              '바꿀 카드이름을 입력해주쇼',
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                            content: TextField(
+                                              controller:
+                                                  cardTextEditingController,
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  cardBloc.add(
+                                                    ChangeName(
+                                                      newCardName:
+                                                          cardTextEditingController
+                                                              .text,
+                                                      id: state
+                                                          .sample[index].cardId,
+                                                    ),
+                                                  );
+
+                                                  Navigator.pop(context);
+                                                  cardTextEditingController
+                                                      .clear();
+                                                },
+                                                child: const Text('확인'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, '취소');
+                                                  cardTextEditingController
+                                                      .clear();
+                                                },
+                                                child: const Text('취소'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        state.sample[index].cardName,
+                                      ),
                                     ),
                                     secondary: GestureDetector(
                                       child: const Icon(
