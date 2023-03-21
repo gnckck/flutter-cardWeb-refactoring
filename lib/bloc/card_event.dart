@@ -34,4 +34,8 @@ class ChangeName extends CardEvent {
   ChangeName({required this.newCardName, required this.id});
 }
 
-class SearchCard extends CardEvent {}
+class SearchCard extends CardEvent {
+  final String searchText;
+
+  SearchCard(this.searchText);
+}

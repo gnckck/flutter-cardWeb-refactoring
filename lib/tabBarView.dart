@@ -11,16 +11,19 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardBloc = BlocProvider.of<CardBloc>(context);
-    return Scaffold(body: BlocBuilder<CardBloc, CardState>(
-      builder: (context, state) {
-        return ListView.builder(
+    return Scaffold(
+      body: BlocBuilder<CardBloc, CardState>(
+        builder: (context, state) {
+          return ListView.builder(
             itemCount: checkedList.length,
             itemBuilder: ((context, index) {
               final cardModel = checkedList[index];
               return CheckboxListTile(
                 value: cardModel.isChecked,
                 onChanged: (newValue) {
-                  cardBloc.add(IsChecked(newValue!, cardModel.cardId));
+                  cardBloc.add(
+                    IsChecked(newValue!, cardModel.cardId),
+                  );
                 },
                 title: Text(
                   cardModel.cardName,
@@ -29,11 +32,15 @@ class CardView extends StatelessWidget {
                   child: const Icon(
                     Icons.delete,
                   ),
-                  onTap: () => cardBloc.add(RemoveCard(cardModel.cardId)),
+                  onTap: () => cardBloc.add(
+                    RemoveCard(cardModel.cardId),
+                  ),
                 ),
               );
-            }));
-      },
-    ));
+            }),
+          );
+        },
+      ),
+    );
   }
 }

@@ -9,16 +9,28 @@ class CheckState {
 }
 
 class CardState {
-  final List<CheckState> sample;
+  List<CheckState> sample;
+
+  List<CheckState> searchList;
 
   CardState({
     sample,
-  }) : sample = sample ?? [];
+    searchList,
+  })  : sample = sample ?? [],
+        searchList = searchList ?? [...?sample];
 
   CardState copyWith({
     List<CheckState>? sample,
   }) =>
       CardState(
+        sample: sample ?? this.sample,
+      );
+
+  CardState copyWithSample({
+    List<CheckState>? searchList,
+  }) =>
+      CardState(
         sample: sample,
+        searchList: searchList ?? sample,
       );
 }

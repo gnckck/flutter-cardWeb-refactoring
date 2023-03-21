@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ex_refactoring/cardList.dart';
 import 'package:meta/meta.dart';
-import 'package:collection/collection.dart';
 part 'card_event.dart';
 part 'card_state.dart';
 
@@ -13,13 +12,16 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   int? beforeIndex;
 
   CardBloc() : super(CardState()) {
-    on<RemoveCard>((event, emit) {
-      emit(
-        state.copyWith(
-            sample: state.sample
-              ..removeWhere((element) => event.id == element.cardId)),
-      );
-    });
+    on<RemoveCard>(
+      (event, emit) {
+        emit(
+          state.copyWith(
+            sample: List.from(state.sample)
+              ..removeWhere((element) => event.id == element.cardId),
+          ),
+        );
+      },
+    );
 
     on<DragCard>(
       (event, emit) {
@@ -31,7 +33,9 @@ class CardBloc extends Bloc<CardEvent, CardState> {
           state.sample.insert(event.currentIndex, temp);
 
           beforeIndex = event.currentIndex;
-          emit(state.copyWith(sample: state.sample));
+          emit(
+            state.copyWith(sample: state.sample),
+          );
         }
       },
     );
@@ -46,10 +50,12 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     on<SendText>(
       (event, emit) {
         final String id = DateTime.now().toString();
-        emit(state.copyWith(
-          sample: List.from(state.sample)
-            ..add(CheckState(event.enteredText, id)),
-        ));
+        emit(
+          state.copyWith(
+            sample: List.from(state.sample)
+              ..add(CheckState(event.enteredText, id)),
+          ),
+        );
       },
     );
 
@@ -69,6 +75,15 @@ class CardBloc extends Bloc<CardEvent, CardState> {
             state.sample.indexWhere((element) => event.id == element.cardId);
         state.sample[targetIndex].cardName = event.newCardName;
         emit(state.copyWith(sample: state.sample));
+      },
+    );
+
+    on<SearchCard>(
+      (event, emit) {
+        emit(state.copyWithSample(
+            searchList: state.sample
+                .where((element) => element.cardName.contains(event.searchText))
+                .toList()));
       },
     );
   }
