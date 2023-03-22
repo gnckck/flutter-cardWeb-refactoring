@@ -18,6 +18,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
           state.copyWith(
             sample: List.from(state.sample)
               ..removeWhere((element) => event.id == element.cardId),
+            searchList: List.from(state.searchList)
+              ..removeWhere((element) => event.id == element.cardId),
           ),
         );
       },
@@ -28,13 +30,17 @@ class CardBloc extends Bloc<CardEvent, CardState> {
         beforeIndex ??= event.currentIndex;
         if (beforeIndex != event.currentIndex) {
           CheckState temp = state.sample[beforeIndex!];
+          CheckState temp2 = state.searchList[beforeIndex!];
 
           state.sample.removeAt(beforeIndex!);
           state.sample.insert(event.currentIndex, temp);
 
+          state.searchList.removeAt(beforeIndex!);
+          state.searchList.insert(event.currentIndex, temp2);
+
           beforeIndex = event.currentIndex;
           emit(
-            state.copyWith(sample: state.sample),
+            state.copyWith(sample: state.sample, searchList: state.searchList),
           );
         }
       },
@@ -61,11 +67,15 @@ class CardBloc extends Bloc<CardEvent, CardState> {
 
     on<IsChecked>(
       (event, emit) {
-        int targetIndex =
+        int sampleTargetIndex =
             state.sample.indexWhere((element) => event.id == element.cardId);
-        state.sample[targetIndex].isChecked = event.value;
+        int searchTargetIndex = state.searchList
+            .indexWhere((element) => event.id == element.cardId);
+        state.sample[sampleTargetIndex].isChecked = event.value;
+        state.searchList[searchTargetIndex].isChecked = event.value;
 
-        emit(state.copyWith(sample: state.sample));
+        emit(
+            state.copyWith(sample: state.sample, searchList: state.searchList));
       },
     );
 
@@ -80,7 +90,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
 
     on<SearchCard>(
       (event, emit) {
-        emit(state.copyWithSample(
+        emit(state.copyWith(
             searchList: state.sample
                 .where((element) => element.cardName.contains(event.searchText))
                 .toList()));
